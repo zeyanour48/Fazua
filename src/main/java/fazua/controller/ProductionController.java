@@ -58,7 +58,10 @@ public class ProductionController implements Initializable {
     @FXML
     private Text failedItems;
     @FXML
-
+    private Text currentMotorOutputValue;
+    @FXML
+    private Text movingMotorLabel;
+    @FXML
     private TextField drivePackSerialNumber;
     @FXML
     private TextField drivePackSoftwareVersion;
@@ -234,6 +237,9 @@ public class ProductionController implements Initializable {
 
                 bindProgressBar();
                 testMotorProgressBar.setVisible(true);
+                currentMotorOutputValue.setText("");
+                movingMotorLabel.setVisible(true);
+
             }
         });
     }
@@ -247,6 +253,9 @@ public class ProductionController implements Initializable {
                 passedItems.setText(String.valueOf(motorTesterTask.getPassedItems()));
                 failedItems.setText(String.valueOf(motorTesterTask.getFailedItems()));
                 testMotorProgressBar.setVisible(false);
+                currentMotorOutputValue.setText(String.valueOf(  motorTesterTask.getCurrentMotorOtputValue()));
+                movingMotorLabel.setVisible(false);
+
             }
         });
     }
@@ -346,6 +355,8 @@ public class ProductionController implements Initializable {
         testMotorProgressBar.setProgress(0);
         testMotorProgressBar.progressProperty().bind(motorTesterTask.progressProperty());
         testMotorProgressBar.setVisible(false);
+        movingMotorLabel.setVisible(false);
+
     }
 
     @Override

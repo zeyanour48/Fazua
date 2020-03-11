@@ -32,7 +32,8 @@ public class FazuaApp extends Application {
                 productionController.shutdown();
             }
         });
-
+stage.setTitle("Fazua evation drive system production line");
+stage.setMaximized(true);
         stage.show();
     }
 

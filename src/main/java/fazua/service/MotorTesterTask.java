@@ -17,6 +17,12 @@ public class MotorTesterTask extends Task<Void>{
     private Integer testedItems;
     private Integer passedItems;
     private Integer failedItems;
+
+    public Integer getCurrentMotorOtputValue() {
+        return currentMotorOtputValue;
+    }
+
+    private Integer currentMotorOtputValue;
     public void setProgressBar(ProgressBar progressBar) {
         this.progressBar = progressBar;
     }
@@ -37,10 +43,12 @@ public class MotorTesterTask extends Task<Void>{
         testedItems=0;
         passedItems=0;
         failedItems=0;
+
     }
     //Generate Random Motor Value
     public Boolean motorTest() {
         Integer motorOutput = Math.toIntExact(Math.round(Math.floor(80 + ((150 - 80 + 1) * Math.random()))));
+        currentMotorOtputValue=motorOutput;
         if ((motorOutput > 85) && (motorOutput < 140))
             return true;
         else
