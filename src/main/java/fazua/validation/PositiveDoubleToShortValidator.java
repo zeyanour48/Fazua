@@ -9,7 +9,7 @@ import java.math.BigInteger;
 
 public class PositiveDoubleToShortValidator implements Validator<String> {
     private Short validValue;
-
+    private String fieldName;
 
 
     @Override
@@ -94,10 +94,12 @@ public class PositiveDoubleToShortValidator implements Validator<String> {
 //            condition=true;
 //        }
        }
-        return ValidationResult.fromMessageIf( control, "not a positive Double Number. Invalid format!", Severity.ERROR, condition );
+        return ValidationResult.fromMessageIf( control, this.fieldName+" is not a positive Double Number. Invalid format!", Severity.ERROR, condition );
 
     }
-
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
 
     public Short getValidValue() {
         return validValue;

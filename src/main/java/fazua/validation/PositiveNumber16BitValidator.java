@@ -7,7 +7,7 @@ import org.controlsfx.validation.Validator;
 
 public class PositiveNumber16BitValidator implements Validator<String> {
     private Short validValue;
-
+    private String fieldName;
 
 
     @Override
@@ -33,11 +33,13 @@ public class PositiveNumber16BitValidator implements Validator<String> {
             condition=true;
         }
        }
-        return ValidationResult.fromMessageIf( control, "not a positive number max 16 bit", Severity.ERROR, condition );
+        return ValidationResult.fromMessageIf( control, this.fieldName+" is not a positive number max 16 bit", Severity.ERROR, condition );
 
     }
 
-
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
     public Short getValidValue() {
         return validValue;
     }

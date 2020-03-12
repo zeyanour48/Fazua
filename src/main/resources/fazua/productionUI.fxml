@@ -13,9 +13,9 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 
-<GridPane hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fazua.controller.ProductionController">
+<GridPane fx:id="gpane" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fazua.controller.ProductionController">
     <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
-     <Text fill="blue" text="DrivePack Production:" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
+     <Text fill="blue" text="Drivepack Production:" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
       <font>
          <Font name="System Bold" size="12.0" />
       </font></Text>
@@ -25,9 +25,9 @@
         </font></Text>
     <Label text="Serial Number:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
     <CustomTextField fx:id="drivePackSerialNumber" promptText="Enter a positive number " GridPane.columnIndex="1" GridPane.rowIndex="1" />
-    <Label text="SoftwareVersion" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Label text="Software Version" GridPane.columnIndex="0" GridPane.rowIndex="2" />
     <CustomTextField fx:id="drivePackSoftwareVersion" promptText="Enter a positive double number " GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <Label text="MotorSerialNumber" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <Label text="Motor Serial Number" GridPane.columnIndex="0" GridPane.rowIndex="3" />
     <CustomTextField fx:id="drivePackMotorSerialNumber" prefHeight="25.0" prefWidth="212.0" promptText="Enter a positive number " GridPane.columnIndex="1" GridPane.rowIndex="3" />
     <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
         <Button fx:id="addDrivepackButton" onAction="#addDrivePackEvent" text="Add" />
@@ -35,13 +35,13 @@
     </HBox>
     <Text text="Items in queue:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
     <Text fx:id="drivePackItems" text="0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-    <Text text="Produced Drive Pack Items:" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+    <Text text="Produced Drivepack Items:" GridPane.columnIndex="4" GridPane.rowIndex="4" />
     <Text fx:id="producedDrivePackItems" text="0" GridPane.columnIndex="5" GridPane.rowIndex="4" />
     <Separator prefHeight="10" GridPane.columnSpan="10" GridPane.rowIndex="5">
     </Separator>
 
     <!--===================================================-->
-    <Text fill="blue" text="BottomBracket Production:" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+    <Text fill="blue" text="Bottom Bracket Production:" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
@@ -52,7 +52,7 @@
         </font></Text>
     <Label text="Serial Number:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
     <CustomTextField fx:id="bottomBracketSerialNumber" promptText="Enter a positive number " GridPane.columnIndex="1" GridPane.rowIndex="7" />
-    <Label text="TorqueSensorSerialNumber" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+    <Label text="Torque Sensor Serial Number" GridPane.columnIndex="0" GridPane.rowIndex="8" />
     <CustomTextField fx:id="bottomBracketTorqueSensorSerialNumber" promptText="Enter a max 12 Digits String" GridPane.columnIndex="1" GridPane.rowIndex="8" />
     <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="9">
         <Button onAction="#addBottomBracketEvent" text="Add" />
@@ -79,7 +79,7 @@
         </font></Text>
     <Label text="Serial Number:" GridPane.columnIndex="0" GridPane.rowIndex="12" />
     <CustomTextField fx:id="remoteSerialNumber" promptText="Enter a positive number" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-    <Label text="HMIBoardSerialNumber" GridPane.columnIndex="0" GridPane.rowIndex="13" />
+    <Label text="HMI Board Serial Number" GridPane.columnIndex="0" GridPane.rowIndex="13" />
     <CustomTextField fx:id="remoteHMIBoardSerialNumber" promptText="Enter a positive number" GridPane.columnIndex="1" GridPane.rowIndex="13" />
     <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="14">
         <Button onAction="#addRemoteEvent" text="Add" />
@@ -94,7 +94,7 @@
     </Separator>
 
     <!--===================================================-->
-    <Text fill="blue" text="EvationDriveSystem Production:" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="16">
+    <Text fill="blue" text="Evation Drive System Production:" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="16">
     <font>
         <Font name="System Bold" size="12.0" />
     </font></Text>
@@ -104,13 +104,13 @@
         </font></Text>
     <Text text="Items in queue:" GridPane.columnIndex="2" GridPane.rowIndex="18" />
     <Text fx:id="assembledItems" text="0" GridPane.columnIndex="3" GridPane.rowIndex="18" />
-    <Text text="Produced EvationDriveSystem Items:" GridPane.columnIndex="4" GridPane.rowIndex="18" />
+    <Text text="Produced Evation Drive System Items:" GridPane.columnIndex="4" GridPane.rowIndex="18" />
     <Text fx:id="producedEvationDriveSystemItems" text="0" GridPane.columnIndex="5" GridPane.rowIndex="18" />
     <Separator prefHeight="10" GridPane.columnSpan="10" GridPane.rowIndex="19">
     </Separator>
 
     <!--===================================================-->
-    <Text fill="blue" text="MotorTester :" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="20">
+    <Text fill="blue" text="Motor Tester :" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="20">
     <font>
         <Font name="System Bold" size="12.0" />
     </font>
@@ -126,7 +126,7 @@
     <Text fx:id="failedItems" text="0" GridPane.columnIndex="3" GridPane.rowIndex="21" />
     <Text text="Tested Items:" GridPane.columnIndex="4" GridPane.rowIndex="21" />
     <Text fx:id="testedItems" text="0" GridPane.columnIndex="5" GridPane.rowIndex="21" />
-    <Text fill="darkviolet" fx:id="movingMotorLabel"  text="Moving Motor for 4 seconds..." GridPane.columnIndex="0" GridPane.rowIndex="22" >
+    <Text fx:id="movingMotorLabel" fill="darkviolet" text="Moving Motor for 4 seconds..." GridPane.columnIndex="0" GridPane.rowIndex="22">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
@@ -135,29 +135,24 @@
 
     <ProgressBar fx:id="testMotorProgressBar" layoutX="54.0" layoutY="103.0" prefHeight="25.0" prefWidth="326.0" progress="0.0" GridPane.columnIndex="1" GridPane.rowIndex="22" />
 
-    <Text fill="darkviolet" text="Last Motor Output Value:" GridPane.columnIndex="2" GridPane.rowIndex="22" >
+    <Text fill="darkviolet" text="Last Motor Output Value:" GridPane.columnIndex="2" GridPane.rowIndex="22">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
     </Text>
 
 
-    <Text fx:id="currentMotorOutputValue" text="" GridPane.columnIndex="3" GridPane.rowIndex="22" >
+    <Text fx:id="currentMotorOutputValue" text="" GridPane.columnIndex="3" GridPane.rowIndex="22">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
     </Text>
 
-
-    <Label fx:id="validationErrors1" textFill="#ee0606" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-    <Label fx:id="validationErrors2" textFill="#ee0606" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-    <Label fx:id="validationErrors3" textFill="#ee0606" GridPane.columnIndex="2" GridPane.rowIndex="14" />
-
-    <columnConstraints>
+   <columnConstraints>
         <ColumnConstraints maxWidth="207.0" minWidth="152.0" prefWidth="207.0" />
         <ColumnConstraints maxWidth="320.0" minWidth="265.0" prefWidth="265.0" />
-        <ColumnConstraints maxWidth="317.0" minWidth="89.0" prefWidth="137.0" />
-        <ColumnConstraints maxWidth="244.0" minWidth="16.0" prefWidth="62.0" />
+        <ColumnConstraints maxWidth="317.0" minWidth="89.0" prefWidth="151.0" />
+        <ColumnConstraints maxWidth="244.0" minWidth="16.0" prefWidth="48.0" />
         <ColumnConstraints maxWidth="335.0" minWidth="199.0" prefWidth="215.0" />
         <ColumnConstraints maxWidth="119.0" minWidth="15.0" prefWidth="119.0" />
         <ColumnConstraints />

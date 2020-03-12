@@ -26,7 +26,7 @@ public class BottomBracket {
         passes=Util.ensureNotNull(torqueSensorSerialNumber, "TorqueSensor Serial Number is null", errors);
         if (passes) {
             if (!torqueSensorSerialNumber.matches("\\d{1,12}")) {
-                errors.add("Invalid TorqueSensor Serial Number Format : " ) ;
+                errors.add("Invalid TorqueSensor Serial Number Format  " ) ;
             }
         }
         if (!errors.isEmpty()) {

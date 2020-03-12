@@ -7,7 +7,7 @@ import org.controlsfx.validation.Validator;
 
 public class Ascii12DigitsValidator implements Validator<String> {
     private String validValue;
-
+private String fieldName;
 
 
     @Override
@@ -28,10 +28,13 @@ public class Ascii12DigitsValidator implements Validator<String> {
               validValue=null;
 
 
-        return ValidationResult.fromMessageIf( control, "not a positive Double Number. Invalid format!", Severity.ERROR, condition );
+        return ValidationResult.fromMessageIf( control, this.fieldName+" is not a max 12 ASCII digits. Invalid format!", Severity.ERROR, condition );
 
     }
 
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
 
     public String getValidValue() {
         return validValue;

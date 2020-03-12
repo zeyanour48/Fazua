@@ -1,5 +1,7 @@
 package fazua.controller;
 
+import fazua.helper.Toast;
+import fazua.helper.Util;
 import fazua.model.BottomBracket;
 import fazua.model.Drivepack;
 import fazua.model.EvationDriveSystem;
@@ -15,7 +17,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
@@ -81,12 +86,7 @@ public class ProductionController implements Initializable {
 
     @FXML
     private ProgressBar testMotorProgressBar;
-    @FXML
-    Label validationErrors1;
-    @FXML
-    Label validationErrors2;
-    @FXML
-    Label validationErrors3;
+    @FXML private GridPane gpane;
 
     ValidationSupport drivepackValidationSupport = new ValidationSupport();
     Validator<String> validator1;
@@ -194,12 +194,16 @@ public class ProductionController implements Initializable {
         motorTesterInit();
     }
 
+
     private void updateDrivepackView() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 drivePackItems.setText(String.valueOf(queue1.size()));
                 producedDrivePackItems.setText(String.valueOf(drivepackProduction.getProducedItems()));
+                Stage stage=(Stage) gpane.getScene().getWindow();
+                Toast.makeText(stage, "A new DrivePack is added successfully...", 3500, 500, 500,550,70,100,500,12, Color.GREEN);
+
             }
         });
     }
@@ -210,6 +214,9 @@ public class ProductionController implements Initializable {
             public void run() {
                 bottomBracketItems.setText(String.valueOf(queue2.size()));
                 producedBottomBracketItems.setText(String.valueOf(bottomBracketProduction.getProducedItems()));
+                Stage stage=(Stage) gpane.getScene().getWindow();
+                Toast.makeText(stage, "A new BottomBracket is added successfully...", 3500, 500, 500,550,240,90,500,12, Color.GREEN);
+
             }
         });
     }
@@ -220,6 +227,9 @@ public class ProductionController implements Initializable {
             public void run() {
                 remoteItems.setText(String.valueOf(queue3.size()));
                 producedRemoteItems.setText(String.valueOf(remoteProduction.getProducedItems()));
+                Stage stage=(Stage) gpane.getScene().getWindow();
+                Toast.makeText(stage, "A new Remote is added successfully...", 3500, 500, 500,550,390,90,500,12, Color.GREEN);
+
             }
         });
     }
@@ -274,13 +284,17 @@ public class ProductionController implements Initializable {
         service2.shutdown();
         service3.shutdown();
     }
-
     @FXML
     private void addDrivePackEvent(ActionEvent event) {
+        Stage stage = (Stage) gpane.getScene().getWindow();
+
         drivepackValidationSupport.setErrorDecorationEnabled(true);
         if (drivepackValidationSupport.isInvalid()) {
             System.out.println(drivepackValidationSupport.getValidationResult().getErrors().toString());
-              } else {
+            String toastMsg = Util.formatValidationSupportMsg(drivepackValidationSupport);
+            Toast.makeText(stage, toastMsg, 3500, 500, 500,550,70,100,500,12, Color.RED);
+
+        } else {
             Integer sn = ((PositiveNumber32BitValidator) validator1).getValidValue();
             Short swn = ((PositiveDoubleToShortValidator) validator2).getValidValue();
             Short msn = ((PositiveNumber16BitValidator) validator3).getValidValue();
@@ -288,24 +302,31 @@ public class ProductionController implements Initializable {
             try {
                 drivepack = new Drivepack(sn, swn, msn);
                 drivepackProduction.setDrivepack(drivepack);
-                   service1.submit(drivepackProduction);
+                service1.submit(drivepackProduction);
             } catch (Exception e) {
                 System.out.println(e.getSuppressed());
                 String msg = "";
                 for (int i = 0; i < e.getSuppressed().length; i++) {
                     msg += e.getSuppressed()[i] + "\n";
                 }
-                validationErrors1.setText(msg);
-                validationErrors1.setVisible(true);
+//                validationErrors1.setText(msg);
+//                validationErrors1.setVisible(true);
+                Toast.makeText(stage, msg, 3500, 500, 500,550,70,100,500,12, Color.RED);
+
             }
         }
     }
 
+
     @FXML
     public void addBottomBracketEvent(ActionEvent actionEvent) {
+        Stage stage = (Stage) gpane.getScene().getWindow();
         bottomBracketValidationSupport.setErrorDecorationEnabled(true);
         if (bottomBracketValidationSupport.isInvalid()) {
             System.out.println(bottomBracketValidationSupport.getValidationResult().getErrors().toString());
+            String toastMsg = Util.formatValidationSupportMsg(bottomBracketValidationSupport);
+            Toast.makeText(stage, toastMsg, 3500, 500, 500,550,240,90,500,12, Color.RED);
+
         } else {
             Integer sn = ((PositiveNumber32BitValidator) validator4).getValidValue();
             String tssn = ((Ascii12DigitsValidator) validator5).getValidValue();
@@ -320,16 +341,25 @@ public class ProductionController implements Initializable {
                 for (int i = 0; i < e.getSuppressed().length; i++) {
                     msg += e.getSuppressed()[i] + "\n";
                 }
-                validationErrors2.setText(msg);
-                validationErrors2.setVisible(true);
+//                validationErrors2.setText(msg);
+//                validationErrors2.setVisible(true);
+                Toast.makeText(stage, msg, 3500, 500, 500,550,240,90,500,12, Color.RED);
+
             }
+
         }
+
+
     }
     @FXML
     public void addRemoteEvent(ActionEvent actionEvent) {
+        Stage stage = (Stage) gpane.getScene().getWindow();
         remoteValidationSupport.setErrorDecorationEnabled(true);
         if (remoteValidationSupport.isInvalid()) {
             System.out.println(remoteValidationSupport.getValidationResult().getErrors().toString());
+            String toastMsg = Util.formatValidationSupportMsg(remoteValidationSupport);
+            Toast.makeText(stage, toastMsg, 3500, 500, 500,550,390,90,500,12, Color.RED);
+
         } else {
             Integer sn = ((PositiveNumber32BitValidator) validator6).getValidValue();
             Short tssn = ((PositiveNumber16BitValidator) validator7).getValidValue();
@@ -344,11 +374,14 @@ public class ProductionController implements Initializable {
                 for (int i = 0; i < e.getSuppressed().length; i++) {
                     msg += e.getSuppressed()[i] + "\n";
                 }
-                validationErrors3.setText(msg);
-                validationErrors3.setVisible(true);
+
+                Toast.makeText(stage, msg, 3500, 500, 500,550,390,90,500,12, Color.RED);
+
             }
         }
+
     }
+
 
     public void bindProgressBar() {
         testMotorProgressBar.progressProperty().unbind();
@@ -368,8 +401,9 @@ initializeDrivepackValidators();
 
     private void initializeRemoteValidators() {
         validator6 = new PositiveNumber32BitValidator();
+((PositiveNumber32BitValidator) validator6).setFieldName("Serial number ");
         validator7= new PositiveNumber16BitValidator();
-
+((PositiveNumber16BitValidator) validator7).setFieldName("HMI board serial number ");
         remoteValidationSupport.registerValidator(remoteSerialNumber, true,   validator6);
         remoteValidationSupport.registerValidator(remoteHMIBoardSerialNumber, true,validator7);
 
@@ -377,7 +411,9 @@ initializeDrivepackValidators();
 
     private void initializeBottomBracketValidators() {
         validator4 = new PositiveNumber32BitValidator();
+        ((PositiveNumber32BitValidator) validator4).setFieldName("Serial number ");
         validator5 = new Ascii12DigitsValidator();
+        ((Ascii12DigitsValidator) validator5).setFieldName("Torque sensor serial number ");
         bottomBracketValidationSupport.registerValidator(bottomBracketSerialNumber, true,   validator4);
         bottomBracketValidationSupport.registerValidator(bottomBracketTorqueSensorSerialNumber, true,validator5);
 
@@ -386,8 +422,11 @@ initializeDrivepackValidators();
 
     private void initializeDrivepackValidators() {
         validator1 = new PositiveNumber32BitValidator();
+        ((PositiveNumber32BitValidator) validator1).setFieldName("Serial number ");
         validator2 = new PositiveDoubleToShortValidator();
+        ((PositiveDoubleToShortValidator) validator2).setFieldName("Software version ");
         validator3 = new PositiveNumber16BitValidator();
+        ((PositiveNumber16BitValidator) validator3).setFieldName("Motor serial number ");
         drivepackValidationSupport.registerValidator(drivePackSerialNumber, true,validator1);
         drivepackValidationSupport.registerValidator(drivePackSoftwareVersion, true, validator2);
         drivepackValidationSupport.registerValidator(drivePackMotorSerialNumber, true,validator3);
