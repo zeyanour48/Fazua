@@ -19,24 +19,24 @@ public class Drivepack {
 
     private void validate() throws Exception {
         List<String> errors = new ArrayList<>();
-        Boolean passes=Util.ensureNotNull(serialNumber, "Serial Number is null", errors);
+        Boolean passes=Util.ensureNotNull(serialNumber, "Serial number is null", errors);
         if (passes) {
             if (serialNumber < 0) {
-                errors.add("Serial Number Is not a positive Integer Number: " ) ;
+                errors.add("Serial number is not a positive integer number" ) ;
             }
         }
 
-        passes=Util.ensureNotNull(softwareVersion, "Software Version is null", errors);
+        passes=Util.ensureNotNull(softwareVersion, "Software version is null", errors);
         if (passes) {
             if (softwareVersion < 0) {
-                errors.add("Invalid Software Version Format : " ) ;
+                errors.add("Invalid software version format " ) ;
             }
         }
 
-        passes= Util.ensureNotNull(motorSerialNumber, "Motor Serial Number is null", errors);
+        passes= Util.ensureNotNull(motorSerialNumber, "Motor serial number is null", errors);
         if (passes) {
             if (motorSerialNumber < 0) {
-                errors.add("Motor Serial Number Is not a positive Short Number: " ) ;
+                errors.add("Motor serial number Is not a positive Short Number: " ) ;
             }
         }
 

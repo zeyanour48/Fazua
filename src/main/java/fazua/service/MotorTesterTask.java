@@ -17,12 +17,8 @@ public class MotorTesterTask extends Task<Void>{
     private Integer testedItems;
     private Integer passedItems;
     private Integer failedItems;
-
-    public Integer getCurrentMotorOtputValue() {
-        return currentMotorOtputValue;
-    }
-
     private Integer currentMotorOtputValue;
+
     public void setProgressBar(ProgressBar progressBar) {
         this.progressBar = progressBar;
     }
@@ -30,14 +26,16 @@ public class MotorTesterTask extends Task<Void>{
     public Integer getTestedItems() {
         return testedItems;
     }
-
     public Integer getPassedItems() {
         return passedItems;
     }
-
     public Integer getFailedItems() {
         return failedItems;
     }
+    public Integer getCurrentMotorOtputValue() {
+        return currentMotorOtputValue;
+    }
+
     public MotorTesterTask(BlockingQueue<EvationDriveSystem> queue1) {
         this.queue1 = queue1;
         testedItems=0;
@@ -85,7 +83,6 @@ public class MotorTesterTask extends Task<Void>{
     }
 
     public void addListener(ProductionLineListener listener) {
-
         listeners.add(listener);
     }
 

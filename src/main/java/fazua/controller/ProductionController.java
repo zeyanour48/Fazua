@@ -1,11 +1,7 @@
 package fazua.controller;
 
-import fazua.helper.Toast;
-import fazua.helper.Util;
-import fazua.model.BottomBracket;
-import fazua.model.Drivepack;
-import fazua.model.EvationDriveSystem;
-import fazua.model.Remote;
+import fazua.helper.*;
+import fazua.model.*;
 import fazua.service.*;
 import fazua.validation.*;
 import javafx.application.Platform;
@@ -14,7 +10,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -23,7 +18,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -66,6 +60,7 @@ public class ProductionController implements Initializable {
     private Text currentMotorOutputValue;
     @FXML
     private Text movingMotorLabel;
+
     @FXML
     private TextField drivePackSerialNumber;
     @FXML
@@ -86,37 +81,87 @@ public class ProductionController implements Initializable {
 
     @FXML
     private ProgressBar testMotorProgressBar;
-    @FXML private GridPane gpane;
-
+    @FXML
+    private GridPane gpane;
+//Drivepack validation objects
     ValidationSupport drivepackValidationSupport = new ValidationSupport();
     Validator<String> validator1;
     Validator<String> validator2;
     Validator<String> validator3;
 
+    //Bottom Bracket validation objects
     ValidationSupport bottomBracketValidationSupport = new ValidationSupport();
     Validator<String> validator4;
     Validator<String> validator5;
 
+    //Remote validation objects
     ValidationSupport remoteValidationSupport = new ValidationSupport();
     Validator<String> validator6;
     Validator<String> validator7;
 
+    //Production Runnables
     DrivepackProduction drivepackProduction;
     BottomBracketProduction bottomBracketProduction;
     RemoteProduction remoteProduction;
     EvationDriveSystemProduction evationDriveSystemProduction;
     MotorTesterTask motorTesterTask;
 
+    //Production queues
     BlockingQueue<Drivepack> queue1;
     BlockingQueue<BottomBracket> queue2;
     BlockingQueue<Remote> queue3;
     BlockingQueue<EvationDriveSystem> queue4;
 
+    //Production Threads
     Thread evationDriveSystemProductionThread;
     Thread motorTesterThread;
 
-    private void drivePackProductionInit() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initializeDrivepackValidators();
+        initializeBottomBracketValidators();
+        initializeRemoteValidators();
+    }
+    private void initializeDrivepackValidators() {
+        validator1 = new PositiveNumber32BitValidator();
+        ((PositiveNumber32BitValidator) validator1).setFieldName("Serial number ");
+        validator2 = new PositiveDoubleToShortValidator();
+        ((PositiveDoubleToShortValidator) validator2).setFieldName("Software version ");
+        validator3 = new PositiveNumber16BitValidator();
+        ((PositiveNumber16BitValidator) validator3).setFieldName("Motor serial number ");
+        drivepackValidationSupport.registerValidator(drivePackSerialNumber, true, validator1);
+        drivepackValidationSupport.registerValidator(drivePackSoftwareVersion, true, validator2);
+        drivepackValidationSupport.registerValidator(drivePackMotorSerialNumber, true, validator3);
+    }
 
+    private void initializeRemoteValidators() {
+        validator6 = new PositiveNumber32BitValidator();
+        ((PositiveNumber32BitValidator) validator6).setFieldName("Serial number ");
+        validator7 = new PositiveNumber16BitValidator();
+        ((PositiveNumber16BitValidator) validator7).setFieldName("HMI board serial number ");
+        remoteValidationSupport.registerValidator(remoteSerialNumber, true, validator6);
+        remoteValidationSupport.registerValidator(remoteHMIBoardSerialNumber, true, validator7);
+    }
+
+    private void initializeBottomBracketValidators() {
+        validator4 = new PositiveNumber32BitValidator();
+        ((PositiveNumber32BitValidator) validator4).setFieldName("Serial number ");
+        validator5 = new Ascii12DigitsValidator();
+        ((Ascii12DigitsValidator) validator5).setFieldName("Torque sensor serial number ");
+        bottomBracketValidationSupport.registerValidator(bottomBracketSerialNumber, true, validator4);
+        bottomBracketValidationSupport.registerValidator(bottomBracketTorqueSensorSerialNumber, true, validator5);
+    }
+
+    //ProductionController Constructor
+    public ProductionController() {
+        drivePackProductionInit();
+        bottomBracketProductionInit();
+        remoteProductionInit();
+        evationDriveSystemProductionInit();
+        motorTesterInit();
+    }
+
+    private void drivePackProductionInit() {
         queue1 = new ArrayBlockingQueue(10);
         drivepackProduction = new DrivepackProduction(queue1);
         drivepackProduction.addListener(new ProductionLineListener() {
@@ -151,11 +196,9 @@ public class ProductionController implements Initializable {
     }
 
     private void evationDriveSystemProductionInit() {
-
         queue4 = new ArrayBlockingQueue(10);
         evationDriveSystemProduction = new EvationDriveSystemProduction(queue1, queue2, queue3, queue4);
         evationDriveSystemProductionThread = new Thread(evationDriveSystemProduction);
-
         evationDriveSystemProduction.addListener(new ProductionLineListener() {
             @Override
             public void onReadingChange() {
@@ -175,35 +218,22 @@ public class ProductionController implements Initializable {
             }
         });
         motorTesterTask.messageProperty().addListener(new ChangeListener<String>() {
-
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 System.out.println(newValue);
             }
         });
         motorTesterThread = new Thread(motorTesterTask);
         motorTesterThread.start();
-
-
     }
-
-    public ProductionController() {
-        drivePackProductionInit();
-        bottomBracketProductionInit();
-        remoteProductionInit();
-        evationDriveSystemProductionInit();
-        motorTesterInit();
-    }
-
-
+//Update Views
     private void updateDrivepackView() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 drivePackItems.setText(String.valueOf(queue1.size()));
                 producedDrivePackItems.setText(String.valueOf(drivepackProduction.getProducedItems()));
-                Stage stage=(Stage) gpane.getScene().getWindow();
-                Toast.makeText(stage, "A new DrivePack is added successfully...", 3500, 500, 500,550,70,100,500,12, Color.GREEN);
-
+                Stage stage = (Stage) gpane.getScene().getWindow();
+                Toast.makeText(stage, "A new Drivepack is added successfully...", 3500, 500, 500, 550, 70, 100, 500, 12, Color.GREEN);
             }
         });
     }
@@ -214,9 +244,8 @@ public class ProductionController implements Initializable {
             public void run() {
                 bottomBracketItems.setText(String.valueOf(queue2.size()));
                 producedBottomBracketItems.setText(String.valueOf(bottomBracketProduction.getProducedItems()));
-                Stage stage=(Stage) gpane.getScene().getWindow();
-                Toast.makeText(stage, "A new BottomBracket is added successfully...", 3500, 500, 500,550,240,90,500,12, Color.GREEN);
-
+                Stage stage = (Stage) gpane.getScene().getWindow();
+                Toast.makeText(stage, "A new Bottom Bracket is added successfully...", 3500, 500, 500, 550, 240, 90, 500, 12, Color.GREEN);
             }
         });
     }
@@ -227,9 +256,8 @@ public class ProductionController implements Initializable {
             public void run() {
                 remoteItems.setText(String.valueOf(queue3.size()));
                 producedRemoteItems.setText(String.valueOf(remoteProduction.getProducedItems()));
-                Stage stage=(Stage) gpane.getScene().getWindow();
-                Toast.makeText(stage, "A new Remote is added successfully...", 3500, 500, 500,550,390,90,500,12, Color.GREEN);
-
+                Stage stage = (Stage) gpane.getScene().getWindow();
+                Toast.makeText(stage, "A new Remote is added successfully...", 3500, 500, 500, 550, 390, 90, 500, 12, Color.GREEN);
             }
         });
     }
@@ -244,7 +272,7 @@ public class ProductionController implements Initializable {
 
                 assembledItems.setText(String.valueOf(queue4.size()));
                 producedEvationDriveSystemItems.setText(String.valueOf(evationDriveSystemProduction.getProducedItems()));
-
+// Start testing
                 bindProgressBar();
                 testMotorProgressBar.setVisible(true);
                 currentMotorOutputValue.setText("");
@@ -252,6 +280,13 @@ public class ProductionController implements Initializable {
 
             }
         });
+    }
+    public void bindProgressBar() {
+        testMotorProgressBar.progressProperty().unbind();
+        testMotorProgressBar.setProgress(0);
+        testMotorProgressBar.progressProperty().bind(motorTesterTask.progressProperty());
+        testMotorProgressBar.setVisible(false);
+        movingMotorLabel.setVisible(false);
     }
 
     private void updateMotorTesterTaskView() {
@@ -263,37 +298,21 @@ public class ProductionController implements Initializable {
                 passedItems.setText(String.valueOf(motorTesterTask.getPassedItems()));
                 failedItems.setText(String.valueOf(motorTesterTask.getFailedItems()));
                 testMotorProgressBar.setVisible(false);
-                currentMotorOutputValue.setText(String.valueOf(  motorTesterTask.getCurrentMotorOtputValue()));
+                currentMotorOutputValue.setText(String.valueOf(motorTesterTask.getCurrentMotorOtputValue()));
                 movingMotorLabel.setVisible(false);
-
             }
         });
     }
 
-
-    public void shutdown() {
-
-        motorTesterTask.shutdown();
-        motorTesterThread.interrupt();
-
-        evationDriveSystemProduction.shutdown();
-        evationDriveSystemProductionThread.interrupt();
-
-
-        service1.shutdown();
-        service2.shutdown();
-        service3.shutdown();
-    }
+//Adding Objects buttons handlers
     @FXML
     private void addDrivePackEvent(ActionEvent event) {
         Stage stage = (Stage) gpane.getScene().getWindow();
-
         drivepackValidationSupport.setErrorDecorationEnabled(true);
         if (drivepackValidationSupport.isInvalid()) {
             System.out.println(drivepackValidationSupport.getValidationResult().getErrors().toString());
             String toastMsg = Util.formatValidationSupportMsg(drivepackValidationSupport);
-            Toast.makeText(stage, toastMsg, 3500, 500, 500,550,70,100,500,12, Color.RED);
-
+            Toast.makeText(stage, toastMsg, 3500, 500, 500, 550, 70, 100, 500, 12, Color.RED);
         } else {
             Integer sn = ((PositiveNumber32BitValidator) validator1).getValidValue();
             Short swn = ((PositiveDoubleToShortValidator) validator2).getValidValue();
@@ -309,10 +328,7 @@ public class ProductionController implements Initializable {
                 for (int i = 0; i < e.getSuppressed().length; i++) {
                     msg += e.getSuppressed()[i] + "\n";
                 }
-//                validationErrors1.setText(msg);
-//                validationErrors1.setVisible(true);
-                Toast.makeText(stage, msg, 3500, 500, 500,550,70,100,500,12, Color.RED);
-
+                Toast.makeText(stage, msg, 3500, 500, 500, 550, 70, 100, 500, 12, Color.RED);
             }
         }
     }
@@ -325,8 +341,7 @@ public class ProductionController implements Initializable {
         if (bottomBracketValidationSupport.isInvalid()) {
             System.out.println(bottomBracketValidationSupport.getValidationResult().getErrors().toString());
             String toastMsg = Util.formatValidationSupportMsg(bottomBracketValidationSupport);
-            Toast.makeText(stage, toastMsg, 3500, 500, 500,550,240,90,500,12, Color.RED);
-
+            Toast.makeText(stage, toastMsg, 3500, 500, 500, 550, 240, 90, 500, 12, Color.RED);
         } else {
             Integer sn = ((PositiveNumber32BitValidator) validator4).getValidValue();
             String tssn = ((Ascii12DigitsValidator) validator5).getValidValue();
@@ -341,16 +356,11 @@ public class ProductionController implements Initializable {
                 for (int i = 0; i < e.getSuppressed().length; i++) {
                     msg += e.getSuppressed()[i] + "\n";
                 }
-//                validationErrors2.setText(msg);
-//                validationErrors2.setVisible(true);
-                Toast.makeText(stage, msg, 3500, 500, 500,550,240,90,500,12, Color.RED);
-
+                Toast.makeText(stage, msg, 3500, 500, 500, 550, 240, 90, 500, 12, Color.RED);
             }
-
         }
-
-
     }
+
     @FXML
     public void addRemoteEvent(ActionEvent actionEvent) {
         Stage stage = (Stage) gpane.getScene().getWindow();
@@ -358,8 +368,7 @@ public class ProductionController implements Initializable {
         if (remoteValidationSupport.isInvalid()) {
             System.out.println(remoteValidationSupport.getValidationResult().getErrors().toString());
             String toastMsg = Util.formatValidationSupportMsg(remoteValidationSupport);
-            Toast.makeText(stage, toastMsg, 3500, 500, 500,550,390,90,500,12, Color.RED);
-
+            Toast.makeText(stage, toastMsg, 3500, 500, 500, 550, 390, 90, 500, 12, Color.RED);
         } else {
             Integer sn = ((PositiveNumber32BitValidator) validator6).getValidValue();
             Short tssn = ((PositiveNumber16BitValidator) validator7).getValidValue();
@@ -374,79 +383,41 @@ public class ProductionController implements Initializable {
                 for (int i = 0; i < e.getSuppressed().length; i++) {
                     msg += e.getSuppressed()[i] + "\n";
                 }
-
-                Toast.makeText(stage, msg, 3500, 500, 500,550,390,90,500,12, Color.RED);
-
+                Toast.makeText(stage, msg, 3500, 500, 500, 550, 390, 90, 500, 12, Color.RED);
             }
         }
-
     }
 
-
-    public void bindProgressBar() {
-        testMotorProgressBar.progressProperty().unbind();
-        testMotorProgressBar.setProgress(0);
-        testMotorProgressBar.progressProperty().bind(motorTesterTask.progressProperty());
-        testMotorProgressBar.setVisible(false);
-        movingMotorLabel.setVisible(false);
-
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-initializeDrivepackValidators();
-        initializeBottomBracketValidators();
-        initializeRemoteValidators();
-          }
-
-    private void initializeRemoteValidators() {
-        validator6 = new PositiveNumber32BitValidator();
-((PositiveNumber32BitValidator) validator6).setFieldName("Serial number ");
-        validator7= new PositiveNumber16BitValidator();
-((PositiveNumber16BitValidator) validator7).setFieldName("HMI board serial number ");
-        remoteValidationSupport.registerValidator(remoteSerialNumber, true,   validator6);
-        remoteValidationSupport.registerValidator(remoteHMIBoardSerialNumber, true,validator7);
-
-    }
-
-    private void initializeBottomBracketValidators() {
-        validator4 = new PositiveNumber32BitValidator();
-        ((PositiveNumber32BitValidator) validator4).setFieldName("Serial number ");
-        validator5 = new Ascii12DigitsValidator();
-        ((Ascii12DigitsValidator) validator5).setFieldName("Torque sensor serial number ");
-        bottomBracketValidationSupport.registerValidator(bottomBracketSerialNumber, true,   validator4);
-        bottomBracketValidationSupport.registerValidator(bottomBracketTorqueSensorSerialNumber, true,validator5);
-
-
-    }
-
-    private void initializeDrivepackValidators() {
-        validator1 = new PositiveNumber32BitValidator();
-        ((PositiveNumber32BitValidator) validator1).setFieldName("Serial number ");
-        validator2 = new PositiveDoubleToShortValidator();
-        ((PositiveDoubleToShortValidator) validator2).setFieldName("Software version ");
-        validator3 = new PositiveNumber16BitValidator();
-        ((PositiveNumber16BitValidator) validator3).setFieldName("Motor serial number ");
-        drivepackValidationSupport.registerValidator(drivePackSerialNumber, true,validator1);
-        drivepackValidationSupport.registerValidator(drivePackSoftwareVersion, true, validator2);
-        drivepackValidationSupport.registerValidator(drivePackMotorSerialNumber, true,validator3);
-
-    }
-
+//Clear Forms buttons handlers
     @FXML
     public void clearDrivePackEvent(ActionEvent actionEvent) {
         drivePackSerialNumber.clear();
         drivePackSoftwareVersion.clear();
         drivePackMotorSerialNumber.clear();
     }
+
     @FXML
     public void clearBottomBracketEvent(ActionEvent actionEvent) {
         bottomBracketSerialNumber.clear();
         bottomBracketTorqueSensorSerialNumber.clear();
     }
+
     @FXML
     public void clearRemoteEvent(ActionEvent actionEvent) {
         remoteSerialNumber.clear();
         remoteHMIBoardSerialNumber.clear();
+    }
+//shutdown Production Services
+    public void shutdown() {
+
+        motorTesterTask.shutdown();
+        motorTesterThread.interrupt();
+
+        evationDriveSystemProduction.shutdown();
+        evationDriveSystemProductionThread.interrupt();
+
+        service1.shutdown();
+        service2.shutdown();
+        service3.shutdown();
     }
 }

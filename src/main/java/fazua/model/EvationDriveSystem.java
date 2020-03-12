@@ -18,9 +18,9 @@ public class EvationDriveSystem {
     }
     private void validate() throws Exception {
         List<String> errors = new ArrayList<>();
-        Util.ensureNotNull(drivePack, "DrivePack Field is null", errors);
-        Util.ensureNotNull(bottomBracket, "BottomBracket Field is null", errors);
-        Util.ensureNotNull(remote, "Remote Field is null", errors);
+        Util.ensureNotNull(drivePack, "Drivepack field is null", errors);
+        Util.ensureNotNull(bottomBracket, "Bottom bracket field is null", errors);
+        Util.ensureNotNull(remote, "Remote field is null", errors);
         if (!errors.isEmpty()) {
             Exception ex = new Exception();
             for(String error: errors) {

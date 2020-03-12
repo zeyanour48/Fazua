@@ -16,18 +16,18 @@ public class Remote {
     }
     private void validate() throws Exception {
         List<String> errors = new ArrayList<>();
-        Boolean passes= Util.ensureNotNull(serialNumber, "Serial Number is null", errors);
+        Boolean passes= Util.ensureNotNull(serialNumber, "Serial number is null", errors);
         if (passes) {
             if (serialNumber < 0) {
-                errors.add("Serial Number Is not a positive Integer Number: " ) ;
+                errors.add("Serial number is not a positive integer number: " ) ;
             }
         }
 
 
-        passes= Util.ensureNotNull(hMIBoardSerialNumber, "HMI Board Serial Number is null", errors);
+        passes= Util.ensureNotNull(hMIBoardSerialNumber, "HMI board serial number is null", errors);
         if (passes) {
             if (hMIBoardSerialNumber < 0) {
-                errors.add("HMI Board Serial Number Is not a positive Short Number: " ) ;
+                errors.add("HMI board serial number is not a positive short number: " ) ;
             }
         }
 

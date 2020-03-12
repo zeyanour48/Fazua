@@ -16,17 +16,17 @@ public class BottomBracket {
     }
     private void validate() throws Exception {
         List<String> errors = new ArrayList<>();
-        Boolean passes= Util.ensureNotNull(serialNumber, "Serial Number is null", errors);
+        Boolean passes= Util.ensureNotNull(serialNumber, "Serial number is null", errors);
         if (passes) {
             if (serialNumber < 0) {
-                errors.add("Serial Number Is not a positive Integer Number: " ) ;
+                errors.add("Serial number is not a positive integer number: " ) ;
             }
         }
 
-        passes=Util.ensureNotNull(torqueSensorSerialNumber, "TorqueSensor Serial Number is null", errors);
+        passes=Util.ensureNotNull(torqueSensorSerialNumber, "Torque sensor serial number is null", errors);
         if (passes) {
             if (!torqueSensorSerialNumber.matches("\\d{1,12}")) {
-                errors.add("Invalid TorqueSensor Serial Number Format  " ) ;
+                errors.add("Invalid torque sensor serial number format  " ) ;
             }
         }
         if (!errors.isEmpty()) {

@@ -16,19 +16,13 @@ private String fieldName;
                 value != null
                         ? !value
                         .matches(
-                                "\\d{1,12}" )
+                                "\\d{1,12}")
                         : value == null;
-
-        System.out.println( value );
-        System.out.println( condition );
-
         if (!condition)
-          validValue=value;
-          else
-              validValue=null;
-
-
-        return ValidationResult.fromMessageIf( control, this.fieldName+" is not a max 12 ASCII digits. Invalid format!", Severity.ERROR, condition );
+            validValue = value;
+        else
+            validValue = null;
+        return ValidationResult.fromMessageIf(control, this.fieldName + " is not a max 12 ASCII digits. Invalid format!", Severity.ERROR, condition);
 
     }
 

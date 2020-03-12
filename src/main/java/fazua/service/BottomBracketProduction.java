@@ -28,7 +28,7 @@ public class BottomBracketProduction implements Runnable {
         if (bottomBracket != null) {
             try {
                 queue.put(bottomBracket);
-                System.out.println(" BottomBracket production is running");
+                System.out.println(" Bottom Bracket production is running");
                 this.bottomBracket = null;
                 fireBottomBracketProductionChangeEvent();
                 producedItems++;

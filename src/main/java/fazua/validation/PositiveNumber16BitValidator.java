@@ -9,37 +9,33 @@ public class PositiveNumber16BitValidator implements Validator<String> {
     private Short validValue;
     private String fieldName;
 
-
     @Override
-    public ValidationResult apply(Control control,  String value) {
+    public ValidationResult apply(Control control, String value) {
         boolean condition =
                 value != null
                         ? !value
                         .matches(
-                                "[0-9]+" )
+                                "[0-9]+")
                         : value == null;
-
-        System.out.println( value );
-        System.out.println( condition );
-
-        if (!condition){
-    Short v = null;
-        try {
-            v = Short.parseShort(value);
-            validValue=v;
-        } catch (NumberFormatException ex) {
-            System.out.println("NumberFormatException");
-            validValue=null;
-            condition=true;
+        if (!condition) {
+            Short v = null;
+            try {
+                v = Short.parseShort(value);
+                validValue = v;
+            } catch (NumberFormatException ex) {
+                System.out.println("NumberFormatException");
+                validValue = null;
+                condition = true;
+            }
         }
-       }
-        return ValidationResult.fromMessageIf( control, this.fieldName+" is not a positive number max 16 bit", Severity.ERROR, condition );
+        return ValidationResult.fromMessageIf(control, this.fieldName + " is not a positive number max 16 bit", Severity.ERROR, condition);
 
     }
 
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
+
     public Short getValidValue() {
         return validValue;
     }

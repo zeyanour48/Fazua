@@ -12,7 +12,7 @@ import javafx.stage.WindowEvent;
 public class FazuaApp extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception{
+    public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("productionUI.fxml"));
         ProductionController productionController = new ProductionController();
         loader.setControllerFactory(t -> productionController);
@@ -32,9 +32,9 @@ public class FazuaApp extends Application {
                 productionController.shutdown();
             }
         });
-stage.setTitle("Fazua evation drive system production line");
-stage.setMaximized(true);
-stage.setResizable(false);
+        stage.setTitle("Fazua evation drive system production line");
+        stage.setMaximized(true);
+        stage.setResizable(false);
         stage.show();
     }
 

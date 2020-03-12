@@ -14,15 +14,13 @@ public class Util {
         }
         return result;
     }
-    static public String formatValidationSupportMsg(ValidationSupport validationSupport)
-    {
-        String v="";
-        for (ValidationMessage s:validationSupport .getValidationResult().getErrors()
+
+    static public String formatValidationSupportMsg(ValidationSupport validationSupport) {
+        String result = "";
+        for (ValidationMessage msg : validationSupport.getValidationResult().getErrors()
         ) {
-            v+=s.getText()+"\n";
-
-
+            result += msg.getText() + "\n";
         }
-        return  v;
+        return result;
     }
 }

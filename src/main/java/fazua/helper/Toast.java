@@ -20,9 +20,9 @@ public final class Toast
         Stage toastStage=new Stage();
         toastStage.initOwner(ownerStage);
         toastStage.setX(x);
+        toastStage.setY(y);
         toastStage.setHeight(h);
         toastStage.setWidth(w);
-        toastStage.setY(y);
 
         toastStage.setResizable(true);
         toastStage.initStyle(StageStyle.TRANSPARENT);
@@ -52,7 +52,6 @@ public final class Toast
                 }
                 catch (InterruptedException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 Timeline fadeOutTimeline = new Timeline();
